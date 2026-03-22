@@ -79,6 +79,45 @@
     .tally-bar-row .tally-count { font-size:0.75rem; font-weight:700; color:var(--white); }
     .no-votes { color:var(--gray); font-style:italic; font-size:0.9rem; padding:16px 0; }
     @media (max-width:768px) { .vote-form{flex-direction:column;} .vote-field select{min-width:100%;} .vote-entry{flex-direction:column;align-items:flex-start;} .tally-bar-row{flex-direction:column;align-items:flex-start;} .tally-bar-row .tally-dest{min-width:auto;} .tally-bar-row .tally-bar{width:100%;} }
+    /* CALENDAR SECTION */
+    .cal-section { max-width:1200px; margin:0 auto; padding:20px 20px 0; }
+    .cal-card { background:var(--white); border-radius:16px; box-shadow:var(--shadow-lg); overflow:hidden; margin-bottom:30px; }
+    .cal-card-header { background:linear-gradient(135deg,#1b4332,var(--green-mid)); color:var(--white); padding:24px 28px; display:flex; align-items:center; gap:14px; }
+    .cal-card-header h2 { font-family:'Playfair Display',serif; font-size:1.6rem; }
+    .cal-card-body { padding:28px; }
+    .cal-form { display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end; margin-bottom:24px; }
+    .cal-year-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; margin-bottom:24px; }
+    .cal-month { background:var(--cream); border-radius:12px; padding:16px; }
+    .cal-month h4 { font-size:0.85rem; font-weight:700; color:var(--green-dark); text-align:center; margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px; }
+    .cal-month table { width:100%; border-collapse:collapse; }
+    .cal-month th { font-size:0.65rem; color:var(--gray); text-align:center; padding:4px 2px; font-weight:600; }
+    .cal-month td { text-align:center; padding:2px; }
+    .cal-month td span { display:inline-block; width:30px; height:30px; line-height:30px; font-size:0.78rem; border-radius:8px; color:var(--gray); }
+    .cal-month td.thu-sun span { cursor:pointer; color:var(--charcoal); background:var(--white); border:1.5px solid #d1d5db; transition:all 0.15s; }
+    .cal-month td.thu-sun span:hover { border-color:var(--green-mid); background:var(--green-pale); }
+    .cal-month td.thu-sun.selected span { background:var(--green-mid); color:var(--white); border-color:var(--green-mid); }
+    .cal-month td.thu-sun.selected-start span { border-radius:8px 0 0 8px; }
+    .cal-month td.thu-sun.selected-end span { border-radius:0 8px 8px 0; }
+    .cal-legend { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px; font-size:0.8rem; color:var(--gray); align-items:center; }
+    .cal-legend-item { display:flex; align-items:center; gap:6px; }
+    .cal-legend-swatch { width:18px; height:18px; border-radius:4px; }
+    .cal-avail-results { margin-top:20px; }
+    .cal-avail-results h3 { font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--green-dark); margin-bottom:16px; }
+    .cal-person { display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--cream); border-radius:10px; margin-bottom:8px; flex-wrap:wrap; }
+    .cal-person .cp-name { font-weight:700; color:var(--green-dark); min-width:120px; }
+    .cal-person .cp-dates { display:flex; gap:6px; flex-wrap:wrap; }
+    .cal-person .cp-date { background:var(--green-pale); color:var(--green-dark); font-size:0.75rem; font-weight:600; padding:3px 10px; border-radius:12px; }
+    .cal-person .cp-remove { background:none; border:none; color:#dc2626; cursor:pointer; font-size:1.1rem; margin-left:auto; padding:4px 8px; border-radius:6px; }
+    .cal-person .cp-remove:hover { background:#fee2e2; }
+    .cal-best { margin-top:20px; padding-top:20px; border-top:2px solid var(--green-pale); }
+    .cal-best h3 { font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--green-dark); margin-bottom:16px; }
+    .cal-best-row { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+    .cal-best-row .cb-date { font-size:0.85rem; font-weight:600; min-width:200px; color:var(--charcoal); }
+    .cal-best-row .cb-bar { flex:1; height:28px; background:#e5e7eb; border-radius:8px; overflow:hidden; }
+    .cal-best-row .cb-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); border-radius:8px; transition:width 0.4s; display:flex; align-items:center; justify-content:flex-end; padding-right:8px; }
+    .cal-best-row .cb-names { font-size:0.72rem; font-weight:700; color:var(--green-dark); }
+    @media (max-width:768px) { .cal-year-grid{grid-template-columns:1fr 1fr;} .cal-form{flex-direction:column;} .cal-best-row{flex-direction:column;align-items:flex-start;} .cal-best-row .cb-date{min-width:auto;} .cal-best-row .cb-bar{width:100%;} }
+    @media (max-width:480px) { .cal-year-grid{grid-template-columns:1fr;} }
     .main-content { max-width:1200px; margin:0 auto; padding:40px 20px; }
     .region-section { margin-bottom:60px; }
     .region-header { display:flex; align-items:center; gap:16px; margin-bottom:28px; padding-bottom:16px; border-bottom:3px solid var(--green-light); }
@@ -128,6 +167,7 @@
 <nav class="region-nav" aria-label="Region navigation">
     <div class="region-nav-inner">
         <a href="#vote">🗳️ Vote</a>
+        <a href="#calendar">📅 Calendar</a>
         <a href="#cost-comparison">📊 Cost Compare</a>
         <a href="#usa">🇺🇸 USA</a>
         <a href="#europe">🇪🇺 Europe</a>
@@ -174,7 +214,7 @@
 </div>
 
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbyFQE0kNyBQDmCtv4a0TwP5ssIeXkxztKsTsQaet7EwZVFnj6QDqBl3XfUCYblWnUZpHQ/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzW339QkKXUam8dMPyiN2JAZqiZjmkjHM3X2FXwPqoLU0JiF5nOu1WDAg--RSNf836QzA/exec';
 
 const DESTINATIONS = [
     "1. Scottsdale, Arizona","2. Pinehurst, North Carolina","3. Pebble Beach, California",
@@ -326,6 +366,198 @@ function escHtml(s) {
 }
 
 init();
+</script>
+
+<!-- CALENDAR SECTION -->
+<div class="cal-section" id="calendar">
+    <div class="cal-card">
+        <div class="cal-card-header">
+            <span style="font-size:1.8rem;">📅</span>
+            <h2>Pick Your Available Weekends (Thu–Sun)</h2>
+        </div>
+        <div class="cal-card-body">
+            <p style="font-size:0.9rem;color:var(--gray);margin-bottom:16px;">Click the Thursday–Sunday dates you're available for the trip. Enter your name, select your weekends, then submit. The best overlapping weekends will show in the results.</p>
+            <div class="cal-form">
+                <div class="vote-field">
+                    <label for="calName">Your Name</label>
+                    <input type="text" id="calName" placeholder="e.g. Mike" maxlength="30">
+                </div>
+                <button class="vote-btn" id="calSubmitBtn" onclick="submitAvailability()">Submit Availability</button>
+                <button class="vote-btn" style="background:var(--gray);font-size:0.8rem;" onclick="clearCalSelections()">Clear Selections</button>
+            </div>
+            <div class="cal-legend">
+                <div class="cal-legend-item"><div class="cal-legend-swatch" style="background:var(--white);border:1.5px solid #d1d5db;"></div> Available (click to select)</div>
+                <div class="cal-legend-item"><div class="cal-legend-swatch" style="background:var(--green-mid);"></div> Selected</div>
+                <div class="cal-legend-item"><div class="cal-legend-swatch" style="background:#e5e7eb;"></div> Not Thu–Sun</div>
+            </div>
+            <div class="cal-year-grid" id="calGrid"></div>
+            <div class="cal-avail-results" id="calResults"></div>
+            <div class="cal-best" id="calBest"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+const CAL_API = 'https://script.google.com/macros/s/AKfycbzW339QkKXUam8dMPyiN2JAZqiZjmkjHM3X2FXwPqoLU0JiF5nOu1WDAg--RSNf836QzA/exec';
+const CAL_YEAR = 2026;
+let selectedWeekends = new Set();
+let allAvailability = [];
+
+function buildCalendar() {
+    const grid = document.getElementById('calGrid');
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const dayHeaders = ['M','T','W','T','F','S','S'];
+    let html = '';
+    for (let m = 0; m < 12; m++) {
+        html += '<div class="cal-month"><h4>' + months[m] + ' ' + CAL_YEAR + '</h4><table><tr>';
+        dayHeaders.forEach(d => html += '<th>' + d + '</th>');
+        html += '</tr><tr>';
+        const firstDay = new Date(CAL_YEAR, m, 1).getDay();
+        const mondayStart = firstDay === 0 ? 6 : firstDay - 1;
+        for (let i = 0; i < mondayStart; i++) html += '<td><span></span></td>';
+        const daysInMonth = new Date(CAL_YEAR, m + 1, 0).getDate();
+        let cellCount = mondayStart;
+        for (let d = 1; d <= daysInMonth; d++) {
+            const date = new Date(CAL_YEAR, m, d);
+            const dow = date.getDay();
+            const isThuSun = dow >= 4 || dow === 0;
+            const dateStr = CAL_YEAR + '-' + String(m+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+            const weekendKey = getWeekendKey(date);
+            if (isThuSun) {
+                const sel = selectedWeekends.has(weekendKey) ? ' selected' : '';
+                html += '<td class="thu-sun' + sel + '" data-weekend="' + weekendKey + '" onclick="toggleWeekend(this,\'' + weekendKey + '\')">';
+                html += '<span>' + d + '</span></td>';
+            } else {
+                html += '<td><span>' + d + '</span></td>';
+            }
+            cellCount++;
+            if (cellCount % 7 === 0 && d < daysInMonth) html += '</tr><tr>';
+        }
+        while (cellCount % 7 !== 0) { html += '<td><span></span></td>'; cellCount++; }
+        html += '</tr></table></div>';
+    }
+    grid.innerHTML = html;
+}
+
+function getWeekendKey(date) {
+    const d = new Date(date);
+    const dow = d.getDay();
+    let thu;
+    if (dow === 4) thu = new Date(d);
+    else if (dow === 5) thu = new Date(d.setDate(d.getDate() - 1));
+    else if (dow === 6) thu = new Date(d.setDate(d.getDate() - 2));
+    else if (dow === 0) thu = new Date(d.setDate(d.getDate() - 3));
+    else return '';
+    const sun = new Date(thu);
+    sun.setDate(thu.getDate() + 3);
+    return formatDate(thu) + ' to ' + formatDate(sun);
+}
+
+function formatDate(d) {
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return months[d.getMonth()] + ' ' + d.getDate();
+}
+
+function toggleWeekend(el, key) {
+    if (!key) return;
+    if (selectedWeekends.has(key)) {
+        selectedWeekends.delete(key);
+    } else {
+        selectedWeekends.add(key);
+    }
+    document.querySelectorAll('td[data-weekend="' + key + '"]').forEach(td => {
+        td.classList.toggle('selected', selectedWeekends.has(key));
+    });
+}
+
+function clearCalSelections() {
+    selectedWeekends.clear();
+    document.querySelectorAll('td.thu-sun.selected').forEach(td => td.classList.remove('selected'));
+}
+
+async function submitAvailability() {
+    const name = document.getElementById('calName').value.trim();
+    if (!name) { alert('Please enter your name.'); return; }
+    if (selectedWeekends.size === 0) { alert('Please select at least one weekend.'); return; }
+    const btn = document.getElementById('calSubmitBtn');
+    btn.textContent = 'Submitting...';
+    btn.disabled = true;
+    const weekends = Array.from(selectedWeekends).sort();
+    try {
+        await fetch(CAL_API, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'calendar', name: name, weekends: weekends.join('|') })
+        });
+        btn.textContent = '✓ Submitted!';
+        document.getElementById('calName').value = '';
+        clearCalSelections();
+        setTimeout(() => { btn.textContent = 'Submit Availability'; btn.disabled = false; }, 2000);
+        setTimeout(() => loadAvailability(), 2500);
+    } catch(err) {
+        alert('Error submitting. Please try again.');
+        btn.textContent = 'Submit Availability';
+        btn.disabled = false;
+    }
+}
+
+async function loadAvailability() {
+    const resultsDiv = document.getElementById('calResults');
+    const bestDiv = document.getElementById('calBest');
+    resultsDiv.innerHTML = '<h3>📋 Submitted Availability</h3><p class="no-votes">Loading...</p>';
+    bestDiv.innerHTML = '';
+    try {
+        const res = await fetch(CAL_API + '?type=calendar');
+        const data = await res.json();
+        allAvailability = Array.isArray(data) ? data : [];
+        renderAvailability();
+    } catch(err) {
+        resultsDiv.innerHTML = '<h3>📋 Submitted Availability</h3><p class="no-votes">Could not load. Refresh to try again.</p>';
+    }
+}
+
+function renderAvailability() {
+    const resultsDiv = document.getElementById('calResults');
+    const bestDiv = document.getElementById('calBest');
+    if (!allAvailability || allAvailability.length === 0) {
+        resultsDiv.innerHTML = '<h3>📋 Submitted Availability</h3><p class="no-votes">No availability submitted yet.</p>';
+        bestDiv.innerHTML = '';
+        return;
+    }
+    let html = '<h3>📋 Submitted Availability (' + allAvailability.length + ' friend' + (allAvailability.length > 1 ? 's' : '') + ')</h3>';
+    allAvailability.forEach(a => {
+        const weekends = a.weekends ? a.weekends.split('|') : [];
+        html += '<div class="cal-person"><span class="cp-name">' + escHtml(a.name) + '</span><span class="cp-dates">';
+        weekends.forEach(w => html += '<span class="cp-date">' + escHtml(w) + '</span>');
+        html += '</span></div>';
+    });
+    html += '<div style="margin-top:12px;"><button class="vote-btn" onclick="loadAvailability()" style="background:var(--gray);font-size:0.8rem;padding:8px 16px;">🔄 Refresh</button></div>';
+    resultsDiv.innerHTML = html;
+    const tally = {};
+    allAvailability.forEach(a => {
+        const weekends = a.weekends ? a.weekends.split('|') : [];
+        weekends.forEach(w => {
+            if (!tally[w]) tally[w] = [];
+            tally[w].push(a.name);
+        });
+    });
+    const sorted = Object.entries(tally).filter(([k,v]) => v.length > 0).sort((a,b) => b[1].length - a[1].length);
+    if (sorted.length === 0) { bestDiv.innerHTML = ''; return; }
+    const maxCount = sorted[0][1].length;
+    let bHtml = '<h3>🏆 Best Weekends <span style="font-size:0.75rem;font-weight:400;color:var(--gray);">(most overlap)</span></h3>';
+    sorted.slice(0, 15).forEach(([weekend, names]) => {
+        const pct = Math.max((names.length / allAvailability.length) * 100, 8);
+        bHtml += '<div class="cal-best-row">';
+        bHtml += '<span class="cb-date">' + escHtml(weekend) + '</span>';
+        bHtml += '<div class="cb-bar"><div class="cb-fill" style="width:' + pct + '%"><span class="cb-names">' + names.length + '/' + allAvailability.length + ' — ' + names.map(n => escHtml(n)).join(', ') + '</span></div></div>';
+        bHtml += '</div>';
+    });
+    bestDiv.innerHTML = bHtml;
+}
+
+buildCalendar();
+loadAvailability();
 </script>
 
 <div class="main-content">
