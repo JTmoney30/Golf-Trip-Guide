@@ -174,6 +174,8 @@
 </div>
 
 <script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbyFQE0kNyBQDmCtv4a0TwP5ssIeXkxztKsTsQaet7EwZVFnj6QDqBl3XfUCYblWnUZpHQ/exec';
+
 const DESTINATIONS = [
     "1. Scottsdale, Arizona","2. Pinehurst, North Carolina","3. Pebble Beach, California",
     "4. Bandon Dunes, Oregon","5. Kiawah Island, South Carolina","6. Streamsong, Florida",
@@ -195,6 +197,8 @@ const DESTINATIONS = [
     "50. Buenos Aires, Argentina"
 ];
 
+let allVotes = [];
+
 function init() {
     ['pick1','pick2','pick3'].forEach(id => {
         const sel = document.getElementById(id);
@@ -204,19 +208,25 @@ function init() {
             sel.appendChild(opt);
         });
     });
-    renderVotes();
+    loadVotes();
 }
 
-function getVotes() {
-    try { return JSON.parse(localStorage.getItem('golfVotes') || '[]'); }
-    catch(e) { return []; }
+async function loadVotes() {
+    const resultsDiv = document.getElementById('voteResults');
+    const tallyDiv = document.getElementById('voteTally');
+    resultsDiv.innerHTML = '<h3>📋 Submitted Picks</h3><p class="no-votes">Loading votes from the group sheet...</p>';
+    tallyDiv.innerHTML = '';
+
+    try {
+        const res = await fetch(API_URL);
+        allVotes = await res.json();
+        renderVotes();
+    } catch(err) {
+        resultsDiv.innerHTML = '<h3>📋 Submitted Picks</h3><p class="no-votes">Could not load votes. Check your connection and refresh.</p>';
+    }
 }
 
-function saveVotes(votes) {
-    localStorage.setItem('golfVotes', JSON.stringify(votes));
-}
-
-function submitVote() {
+async function submitVote() {
     const name = document.getElementById('voterName').value.trim();
     const p1 = document.getElementById('pick1').value;
     const p2 = document.getElementById('pick2').value;
@@ -226,35 +236,46 @@ function submitVote() {
     if (!p1 || !p2 || !p3) { alert('Please select all 3 choices.'); return; }
     if (p1 === p2 || p1 === p3 || p2 === p3) { alert('Please pick 3 different destinations.'); return; }
 
-    const votes = getVotes();
-    const existing = votes.findIndex(v => v.name.toLowerCase() === name.toLowerCase());
-    if (existing >= 0) {
+    const existing = allVotes.find(v => v.name.toLowerCase() === name.toLowerCase());
+    if (existing) {
         if (!confirm(name + ' already voted. Update picks?')) return;
-        votes[existing] = { name, picks: [p1, p2, p3] };
-    } else {
-        votes.push({ name, picks: [p1, p2, p3] });
     }
-    saveVotes(votes);
-    document.getElementById('voterName').value = '';
-    document.getElementById('pick1').value = '';
-    document.getElementById('pick2').value = '';
-    document.getElementById('pick3').value = '';
-    renderVotes();
-}
 
-function removeVote(idx) {
-    const votes = getVotes();
-    votes.splice(idx, 1);
-    saveVotes(votes);
-    renderVotes();
+    const btn = document.querySelector('.vote-btn:not(.clear-btn)');
+    btn.textContent = 'Submitting...';
+    btn.disabled = true;
+
+    try {
+        await fetch(API_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name, pick1: p1, pick2: p2, pick3: p3 })
+        });
+
+        document.getElementById('voterName').value = '';
+        document.getElementById('pick1').value = '';
+        document.getElementById('pick2').value = '';
+        document.getElementById('pick3').value = '';
+
+        btn.textContent = '✓ Submitted!';
+        setTimeout(() => { btn.textContent = 'Submit Picks'; btn.disabled = false; }, 2000);
+
+        // Wait a moment for the sheet to update, then reload
+        setTimeout(() => loadVotes(), 2000);
+    } catch(err) {
+        alert('Error submitting vote. Please try again.');
+        btn.textContent = 'Submit Picks';
+        btn.disabled = false;
+    }
 }
 
 function renderVotes() {
-    const votes = getVotes();
+    const votes = allVotes;
     const resultsDiv = document.getElementById('voteResults');
     const tallyDiv = document.getElementById('voteTally');
 
-    if (votes.length === 0) {
+    if (!votes || votes.length === 0) {
         resultsDiv.innerHTML = '<h3>📋 Submitted Picks</h3><p class="no-votes">No votes yet — be the first to pick!</p>';
         tallyDiv.innerHTML = '';
         return;
@@ -269,9 +290,10 @@ function renderVotes() {
             html += '<span class="ve-pick"><span class="pick-num">#' + (j+1) + '</span>' + escHtml(p) + '</span>';
         });
         html += '</span>';
-        html += '<button class="ve-remove" onclick="removeVote(' + i + ')" title="Remove vote" aria-label="Remove vote for ' + escHtml(v.name) + '">✕</button>';
         html += '</div>';
     });
+
+    html += '<div style="margin-top:12px;"><button class="vote-btn" onclick="loadVotes()" style="background:var(--gray);font-size:0.8rem;padding:8px 16px;">🔄 Refresh Votes</button></div>';
     resultsDiv.innerHTML = html;
 
     // Tally with weighted scoring: 1st=3pts, 2nd=2pts, 3rd=1pt
